@@ -48,12 +48,18 @@ class TodoComponent implements OnInit {
     this.todoInput.nativeElement.value = '';
   }
 
+  cleanPagination = () => {
+    this.totalPages = 0;
+    this.currentPage = 1;
+    this.todos = [];
+  }
+
   /**
    * Event input, perform validation of entered data
    */
   onKeyPress = (event) => {
     if (event.key === 'Enter') {
-      let value = event.target.value;
+      const value = event.target.value;
       if (!value) {
         this.todo['error'] = {required: `Campo requerido.`};
       } else if (!this.regex.test(value)) {
@@ -74,7 +80,7 @@ class TodoComponent implements OnInit {
   beCreated = (created) => {
     this.clean();
     this.toastrService.success(created.success);
-    this.getTodos();
+    this.getPage(this.currentPage); /* Mantiene la pagina actual, al agregar un nuevo elemento */
   }
 
   /* Callback error service create */
@@ -88,24 +94,34 @@ class TodoComponent implements OnInit {
   getTodos = () => {
     this.todoService.todoPagination(this.skip, this.limit).subscribe({
       next: (todos: Todos) => {
+        this.cleanPagination();
         this.totalPages = todos.pages;
         this.currentPage = todos.current;
         this.todos = todos.doc as Data[];
+      },
+      error: err => {
+        const { error } = err;
+        this.toastrService.error(error.error);
       }
-    })
+    });
   }
 
   /* EventEmitter fo child component, change page */
   getPage = (page: number) => {
     this.todoService.todoPagination(page, this.limit).subscribe({
       next: (todos: Todos) => {
+        this.cleanPagination();
         this.totalPages = todos.pages;
         this.currentPage = todos.current;
         this.todos = todos.doc as Data[];
+      },
+      error: err => {
+        const { error } = err;
+        this.toastrService.error(error.error);
       }
-    })
+    });
   }
 
 }
 
-export { TodoComponent }
+export { TodoComponent };

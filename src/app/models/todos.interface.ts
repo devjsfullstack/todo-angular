@@ -1,6 +1,6 @@
 export interface Data{
-  id: string;
-  name: string;
+  _id?: string;
+  name?: string;
 }
 
 export interface Todos {
