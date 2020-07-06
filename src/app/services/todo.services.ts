@@ -1,5 +1,5 @@
-import { Injectable, Inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpEvent } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 
@@ -23,7 +23,7 @@ class TodoService {
   }
 
   todoCreate(todo: any): Observable<any> {
-    return this.http.post(`${this.appService.url}/create`, todo, this.options).pipe(map(res => res))
+    return this.http.post(`${this.appService.url}/create`, todo, this.options).pipe(map(res => res));
   }
 
   todoPagination(skip: number, limit: number): Observable<any> {
@@ -33,7 +33,7 @@ class TodoService {
 
   todoDelete(todo: Data): Observable<any> {
     this.options.body = todo; /* Set body */
-    return this.http.delete(`${this.appService.url}/delete`, this.options).pipe(map(res => res))
+    return this.http.delete(`${this.appService.url}/delete`, this.options).pipe(map(res => res));
   }
 }
 
