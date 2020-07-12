@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { TodoService } from '../../services/todo.services';
+import { SessionService } from 'src/app/services/sesion.service';
 import { Todos, Data, Todo } from '../../models/todos.interface';
 
 @Component({
@@ -25,6 +26,9 @@ class TodoComponent implements OnInit {
   skip: number = 1;
   limit: number = 5;
 
+  /* Security */
+  token: string;
+
   /* Validation utilities */
   todo: Todo = {};
   isValid: boolean = false;
@@ -32,10 +36,12 @@ class TodoComponent implements OnInit {
 
   constructor(
     private todoService: TodoService,
-    private toastrService: ToastrService) {
+    private toastrService: ToastrService,
+    private sessionService: SessionService) {
   }
 
   ngOnInit(): void {
+    this.token = this.sessionService.loadSesionData().token;
     this.getTodos();
   }
 
@@ -108,8 +114,10 @@ class TodoComponent implements OnInit {
 
   /* EventEmitter fo child component, change page */
   getPage = (page: number) => {
+    alert(page);
     this.todoService.todoPagination(page, this.limit).subscribe({
       next: (todos: Todos) => {
+        alert(JSON.stringify(todos))
         this.cleanPagination();
         this.totalPages = todos.pages;
         this.currentPage = todos.current;

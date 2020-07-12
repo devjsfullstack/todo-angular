@@ -3,28 +3,54 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { AppService } from './app.services';
-import { ISesion } from '../models/sesion.interface';
+import { ISession } from '../models/sesion.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 
-class SesionService {
+class SessionService {
 
   localStorageService;
-  currentSesion: ISesion = null;
+  currentSession: ISession = null;
 
   constructor() {
     this.localStorageService = localStorage;
   }
 
-  setSesion = (sesion: ISesion): void => {
-    const { _id, email, token } = sesion;
-    this.localStorageService.setItem('_id', _id);
-    this.localStorageService.setItem('email', email);
-    this.localStorageService.setItem('token', token);
+  /**
+   * Set session variable with payload json {_id, email, token }
+   */
+  setSession = (session: ISession): void => {
+    this.localStorageService.setItem('session', JSON.stringify(session));
   }
 
+  loadSesionData = (): ISession => {
+    const session = this.localStorageService.getItem('session');
+    return session ? JSON.parse(session) as ISession : null;
+  }
+
+  getCurrentSession = () => {
+    return this.loadSesionData();
+  }
+
+  getCurrentEmail = () => {
+    const session: ISession = this.getCurrentSession();
+    return (session && session.email) ? session.email : null;
+  }
+
+  getCurrentToken = () => {
+    const session = this.getCurrentSession();
+    return (session && session.token) ? session.token : null;
+  }
+
+  isAuthenticated = (): boolean => {
+    return (this.getCurrentToken() != null) ? true : false;
+  }
+
+  removeCurrentSession = (): void => {
+    this.localStorageService.removeItem('session');
+  }
 }
 
-export { SesionService };
+export { SessionService };

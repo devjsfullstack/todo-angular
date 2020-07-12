@@ -18,13 +18,13 @@
         <ul class="pagination justify-content-center">
 
           <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
-            <a class="page-link" href="#" tabindex="-1" (click)="changePage(currentPage - 1)">Previous</a>
+            <a class="page-link" tabindex="-1" (click)="changePage(currentPage - 1)">Previous</a>
           </li>
 
-          <li *ngFor="let page of pages; let i = index" [ngClass]="{'active': currentPage === (page + 1)}" class="page-item"><a class="page-link" (click)="changePage(page + 1)" href="#">{{ page + 1 }}</a></li>
+          <li *ngFor="let page of pages; let i = index" [ngClass]="{'active': currentPage === (page + 1)}" class="page-item"><a class="page-link" (click)="changePage(page + 1)">{{ page + 1 }}</a></li>
 
           <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
-            <a class="page-link" href="#"  (click)="changePage(currentPage + 1)">Next</a>
+            <a class="page-link"  (click)="changePage(currentPage + 1)">Next</a>
           </li>
 
         </ul>
