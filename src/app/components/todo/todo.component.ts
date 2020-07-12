@@ -114,10 +114,8 @@ class TodoComponent implements OnInit {
 
   /* EventEmitter fo child component, change page */
   getPage = (page: number) => {
-    alert(page);
     this.todoService.todoPagination(page, this.limit).subscribe({
       next: (todos: Todos) => {
-        alert(JSON.stringify(todos))
         this.cleanPagination();
         this.totalPages = todos.pages;
         this.currentPage = todos.current;
